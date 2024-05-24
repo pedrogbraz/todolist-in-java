@@ -1,5 +1,7 @@
 package br.com.pedrogbraz.todolist.user;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,6 +40,10 @@ public class UserController {
             // Status Code
             return ResponseEntity.status(400).body("Usuário ja Existe!");
         }
+
+        var passwordHashred = BCrypt.withDefaults().hashToString(12, userModel.getPassword().toCharArray());
+
+        userModel.setPassword(passwordHashred);
 
         // Quando for sucesso
         var userCreated = this.userRepository.save(userModel);
