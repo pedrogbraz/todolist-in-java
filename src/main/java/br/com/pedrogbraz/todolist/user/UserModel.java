@@ -3,6 +3,7 @@ package br.com.pedrogbraz.todolist.user;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
@@ -18,6 +19,7 @@ public class UserModel {
     @GeneratedValue(generator = "UUID")
     private UUID id;
 
+    @Column(unique = true) // Indica que o username, irá ser uma coluna única(valor único), para que não seja possível ter usernames repetidos
     private String username;
     private String name;
     private String password;
