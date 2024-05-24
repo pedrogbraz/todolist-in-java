@@ -1,6 +1,7 @@
 package br.com.pedrogbraz.todolist.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,16 +30,17 @@ public class UserController {
      * void (void) - Quando não possui nenhum retorno
      */
     @PostMapping("/")
-    public UserModel create(@RequestBody UserModel userModel) {
+    public ResponseEntity create(@RequestBody UserModel userModel) {
         var user = this.userRepository.findByUsername(userModel.getUsername());
-
-        // Validação para caso ja exista um username, não seja possível criar outro com o mesmo username
+        // Quando ja existir um username igual = erro
         if(user != null) {
-            System.out.println("Usuário ja existe!");
-            return null;
+            // Mensagem de erro
+            // Status Code
+            return ResponseEntity.status(400).body("Usuário ja Existe!");
         }
 
+        // Quando for sucesso
         var userCreated = this.userRepository.save(userModel);
-        return userCreated;
+        return ResponseEntity.status(200).body(userCreated);
     }
 }
